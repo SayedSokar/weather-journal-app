@@ -65,7 +65,11 @@ background-color: green;
         text-align: center;
         margin: auto;
     }
-
+#counteryid{
+     background-color: green;
+        text-align: center;
+        margin: auto;
+}
 .enteryfeel {
     grid-column:3/4 ;
     grid-row: 1;

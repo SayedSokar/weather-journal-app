@@ -34,7 +34,7 @@ function addWezData(req,res){
       dt: new Date(req.body.dt *1000).toLocaleDateString("en-US"),
       cuntery: req.body.cuntery,
       city: req.body.city,
-      temp: (req.body.temp -273.15).toFixed(2)+' °C',
+      temp: req.body.temp +' °C',
       feeling: req.body.feeling
       
   }

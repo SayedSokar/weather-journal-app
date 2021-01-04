@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "..\\web"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "weather-journal-app"
+	}
+}

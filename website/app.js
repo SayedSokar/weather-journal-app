@@ -3,6 +3,7 @@ const baseURL = 'https://api.openweathermap.org/data/2.5/weather?zip='
 const apiKey = '&appid=cc5bf4d3742aa3ac627686fffec215c2&units=metric';
 
 
+
 const resultDiv = document.querySelector('.resContainer')
 const fragment = document.createDocumentFragment();
 const titleDiv = document.querySelector('.title')

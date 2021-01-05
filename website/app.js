@@ -4,11 +4,10 @@ const apiKey = '&appid=cc5bf4d3742aa3ac627686fffec215c2&units=metric';
 
 
 const resultDiv = document.querySelector('.resContainer')
-console.log(resultDiv)
 const fragment = document.createDocumentFragment();
 const titleDiv = document.querySelector('.title')
 //-----------Helper Functions----------------//
-//-------------- Create new Indication Item---------------------//
+//-------------- Create new Indication Item---------------//
 function createIndItem(itemTxt, elementType, attName, attValue, attName1, attValue1) {
     let newElement = document.createElement(elementType);
     newElement.innerText = itemTxt;
@@ -19,24 +18,11 @@ function createIndItem(itemTxt, elementType, attName, attValue, attName1, attVal
     return newElement;
 };
 
-//------------performAction-------------------------------//
-function performAction(){
-  const zip = document.getElementById('zip').value;
-  const cunteryid = document.querySelector('#counteryid').value
-  const feelings = document.getElementById('feelings').value
-  getwez(baseURL, zip, cunteryid, apiKey)
-    .then(function (data) {
-      console.log('this is the data from weather web',data)
-             
-          postData('/addWezData', { temp: data.main.temp, cuntery: data.sys.country, city: data.name, dt: data.dt, feeling: feelings })
-              
-          updateUI()
-    })
-    
-}
-//----------------------Get the weather Data----------------//
-const getwez = async (baseURL, zip, cunteryid, key) => {
-    const res = await fetch(baseURL + zip + ',' + cunteryid + key)
+
+
+//-------------------Get the weather Data----------------//
+const getwez = async (baseURL, zip, key) => {
+    const res = await fetch(baseURL + zip +  key)
       try {
       const data = await res.json();
       if (res.ok) {
@@ -54,35 +40,12 @@ const getwez = async (baseURL, zip, cunteryid, key) => {
       
     }
 }
-//----------------------------------------------//
-//-----------------POST DATA Function-------//
-const postData = async ( url, data = {})=>{
-      const res = await fetch(url, {
-      method: 'POST', 
-      credentials: 'same-origin',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-     // Body data type must match "Content-Type" header        
-      body: JSON.stringify(data), 
-    });
-
-      try {
-        const newData = await res.json();
-        console.log('this is the POST Response *******',newData);
-        return newData;
-      }catch(error) {
-      console.log("this is catch error", error);
-      }
-  }
 //-----------------updateUI---------------------//
 const updateUI = async () => {
-  const res = await fetch('/retriveData');
+  const res = await fetch('/all');
   try{
     const allData =  await res.json();
-    console.log('this is the Length----++++++', allData.length)
     const existline = document.querySelectorAll('.result')
-    console.log(existline.length)
     
           for (let i = existline.length; i < allData.length;i++) {
         
@@ -102,6 +65,53 @@ const updateUI = async () => {
     console.log("error", error);
   }
 }
+//----------------------------------------------//
+
+
+//-----------------POST DATA Function-------//
+const postData = async ( url, data = {})=>{
+      const res = await fetch(url, {
+      method: 'POST', 
+      credentials: 'same-origin',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+     // Body data type must match "Content-Type" header        
+      body: JSON.stringify(data), 
+    });
+
+      try {
+        const newData = await res.json();
+        return newData;
+      }catch(error) {
+      console.log("this is catch error", error);
+      }
+  }
+//------------performAction-------------------------------//
+function performAction(){
+  const zip = document.getElementById('zip').value;
+  const feelings = document.getElementById('feelings').value
+  getwez(baseURL, zip, apiKey)
+    .then(function (data={}) {
+      const weatherData = {
+        temp: data.main.temp,
+        cuntery: data.sys.country,
+        city: data.name,
+        dt: data.dt,
+        feeling: feelings
+      }
+      return weatherData;
+      
+    })
+    .then(function (weatherData = {}) {
+      postData('/addWezData', weatherData);
+      
+    })
+    .then(function (data = {}) {
+    updateUI()
+  })
+    
+}
 //-------- End of Functions----------------//
   const generate= document.getElementById('generate')
-  generate.addEventListener('click', performAction)
+generate.addEventListener('click', performAction);

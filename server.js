@@ -18,16 +18,14 @@ const database = require('mime-db');
 // Initialize the main project folder
 app.use(express.static('website'));
 
-
-app.get('/retriveData',(request, response) =>{
-    response.send(projectData);
-    console.log('data send back in GET-------*****')
-    
+// Setup Server
+app.use(cors());
+const port = 8080;
+const server = app.listen(port,()=> {
+    console.log(`server running in port ${port}`)
 });
 
-
-app.post('/addWezData', addWezData);
-
+//post function
 function addWezData(req,res){
 
     newWezData = {
@@ -36,18 +34,23 @@ function addWezData(req,res){
       city: req.body.city,
       temp: req.body.temp +' °C',
       feeling: req.body.feeling
-      
   }
     projectData.push(newWezData)
-    //console.log((newWezData))
-    //console.log('push data done in POSt-------*****')
-    console.log('this is what in ProData',projectData)
-}
+    //console.log(newWezData)
+    }
 
-// Setup Server
-app.use(cors());
-const port = 8080;
-const server = app.listen(port,()=> {
-    console.log(`server running in port ${port}`)
+//send the data back to the frontend
+app.get('/all',(request, response) =>{
+    response.send(projectData);
+    
+    
 });
+
+//post response
+app.post('/addWezData', addWezData);
+
+
+    
+
+
 
